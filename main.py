@@ -1,4 +1,5 @@
 import sys
+import pathlib
 
 import pygame
 
@@ -13,11 +14,15 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
 
+    background_surface = pygame.image.load(pathlib.Path('graphics', 'grass.png'))
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+
+        screen.blit(background_surface, (0, 0))
 
         pygame.display.update()
         clock.tick(FRAMERATE_LIMIT)
