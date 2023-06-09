@@ -4,6 +4,7 @@ import pygame
 
 SCREEN_WIDTH = 720
 SCREEN_HEIGHT = 480
+FRAMERATE_LIMIT = 60
 
 
 def main():
@@ -19,7 +20,7 @@ def main():
                 sys.exit()
 
         pygame.display.update()
-        clock.tick(60)
+        clock.tick(FRAMERATE_LIMIT)
 
 
 if __name__ == '__main__':
