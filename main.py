@@ -8,6 +8,7 @@ SCREEN_HEIGHT = 480
 
 def main():
     pygame.init()
+    pygame.display.set_caption('Simple Game')
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
     while True:
