@@ -1,5 +1,5 @@
-import sys
-import pathlib
+from sys import exit
+from pathlib import Path
 
 import pygame
 
@@ -14,13 +14,13 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
 
-    background_surface = pygame.image.load(pathlib.Path('graphics', 'grass.png'))
+    background_surface = pygame.image.load(Path('graphics', 'grass.png'))
 
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-                sys.exit()
+                exit()
 
         screen.blit(background_surface, (0, 0))
 
