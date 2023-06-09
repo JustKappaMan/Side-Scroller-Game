@@ -36,8 +36,8 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
 
-    grass_surface = pygame.image.load(Path('graphics', 'grass.png'))
-    tile_background(screen, grass_surface)
+    grass = pygame.image.load(Path('graphics', 'grass.png'))
+    tile_background(screen, grass)
 
     cherry = pygame.transform.scale(pygame.image.load(Path('graphics', 'cherry.png')), (50, 50))
     place_image_randomly(screen, cherry)
