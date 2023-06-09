@@ -4,9 +4,7 @@ from pathlib import Path
 
 import pygame
 
-SCREEN_WIDTH = 720
-SCREEN_HEIGHT = 480
-FRAMERATE_LIMIT = 60
+from settings import *
 
 
 def tile_background(screen: pygame.display, image: pygame.Surface) -> None:
