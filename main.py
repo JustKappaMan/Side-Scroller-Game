@@ -3,12 +3,12 @@ from math import ceil
 from pathlib import Path
 from random import randint
 
-import pygame
+import pygame as pg
 
 from settings import *
 
 
-def tile_background(screen: pygame.display, image: pygame.Surface) -> None:
+def tile_background(screen: pg.display, image: pg.Surface) -> None:
     screen_width, screen_height = screen.get_size()
     image_width, image_height = image.get_size()
 
@@ -20,7 +20,7 @@ def tile_background(screen: pygame.display, image: pygame.Surface) -> None:
             screen.blit(image, (x * image_width, y * image_height))
 
 
-def place_image_randomly(screen: pygame.display, image: pygame.Surface) -> None:
+def place_image_randomly(screen: pg.display, image: pg.Surface) -> None:
     screen_width, screen_height = screen.get_size()
     image_width, image_height = image.get_size()
 
@@ -31,24 +31,24 @@ def place_image_randomly(screen: pygame.display, image: pygame.Surface) -> None:
 
 
 def main():
-    pygame.init()
-    pygame.display.set_caption('Simple Game')
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    clock = pygame.time.Clock()
+    pg.init()
+    pg.display.set_caption('Simple Game')
+    screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    clock = pg.time.Clock()
 
-    grass = pygame.image.load(Path('graphics', 'grass.png'))
+    grass = pg.image.load(Path('graphics', 'grass.png'))
     tile_background(screen, grass)
 
-    cherry = pygame.transform.scale(pygame.image.load(Path('graphics', 'cherry.png')), (50, 50))
+    cherry = pg.transform.scale(pg.image.load(Path('graphics', 'cherry.png')), (50, 50))
     place_image_randomly(screen, cherry)
 
     while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                pg.quit()
                 exit()
 
-        pygame.display.update()
+        pg.display.update()
         clock.tick(FRAMERATE_LIMIT)
 
 
