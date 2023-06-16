@@ -47,10 +47,13 @@ def main():
             if event.type == pg.QUIT:
                 pg.quit()
                 exit()
+            if event.type == pg.KEYDOWN:
+                if event.key == pg.K_a:
+                    place_image_randomly(screen, cherry)
+                    print('Randomly placing another cherry')
 
         pg.display.update()
         clock.tick(FRAMERATE_LIMIT)
-
 
 if __name__ == '__main__':
     main()
