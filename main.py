@@ -20,8 +20,9 @@ def tile_background(screen: pg.display, image: pg.Surface) -> None:
             screen.blit(image, (x * image_width, y * image_height))
 
 
-class Sprite:
+class Sprite(pg.sprite.Sprite):
     def __init__(self, screen: pg.display, filepath: Path):
+        super().__init__()
         self.screen = screen
         self.image = pg.image.load(filepath)
         self.x_position = None
