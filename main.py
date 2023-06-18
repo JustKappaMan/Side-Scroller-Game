@@ -79,6 +79,10 @@ def main():
             if event.type == pg.QUIT:
                 pg.quit()
                 exit()
+            if event.type == pg.KEYDOWN:
+                if event.key == pg.K_ESCAPE:
+                    pg.quit()
+                    exit()
 
             keys = pg.key.get_pressed()
 
