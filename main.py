@@ -45,7 +45,6 @@ class Sprite(pg.sprite.Sprite):
             raise ValueError(f'{y_position=}, correct values are {min_y_position}...{max_y_position}')
 
         self.x_position, self.y_position = x_position, y_position
-        self.draw()
 
     def set_random_position(self):
         screen_width, screen_height = self.screen.get_size()
@@ -53,7 +52,6 @@ class Sprite(pg.sprite.Sprite):
 
         self.x_position = randint(SCREEN_PADDING, screen_width - SCREEN_PADDING - image_width // 2)
         self.y_position = randint(SCREEN_PADDING, screen_height - SCREEN_PADDING - image_height // 2)
-        self.draw()
 
     def draw(self):
         self.screen.blit(self.image, (self.x_position, self.y_position))
@@ -70,15 +68,18 @@ def main():
 
     cherry = Sprite(screen, Path('graphics', 'cherry.png'))
     cherry.set_random_position()
+    cherry.draw()
 
     ghost = Sprite(screen, Path('graphics', 'ghost.png'))
     ghost.set_random_position()
+    ghost.draw()
 
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 pg.quit()
                 exit()
+
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_ESCAPE:
                     pg.quit()
@@ -87,21 +88,17 @@ def main():
             keys = pg.key.get_pressed()
 
             if keys[pg.K_w]:
-                tile_background(screen, grass)
-                cherry.draw()
                 ghost.set_position(ghost.x_position, ghost.y_position - 4)
             if keys[pg.K_a]:
-                tile_background(screen, grass)
-                cherry.draw()
                 ghost.set_position(ghost.x_position - 4, ghost.y_position)
             if keys[pg.K_s]:
-                tile_background(screen, grass)
-                cherry.draw()
                 ghost.set_position(ghost.x_position, ghost.y_position + 4)
             if keys[pg.K_d]:
-                tile_background(screen, grass)
-                cherry.draw()
                 ghost.set_position(ghost.x_position + 4, ghost.y_position)
+
+        tile_background(screen, grass)
+        cherry.draw()
+        ghost.draw()
 
         pg.display.update()
         clock.tick(FRAMERATE_LIMIT)
