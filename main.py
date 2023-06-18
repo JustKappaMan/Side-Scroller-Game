@@ -21,13 +21,14 @@ def tile_background(screen: pg.display, image: pg.Surface) -> None:
 
 
 class Sprite:
-    def __init__(self, filepath: Path):
+    def __init__(self, screen: pg.display, filepath: Path):
+        self.screen = screen
         self.image = pg.image.load(filepath)
         self.x_position = None
         self.y_position = None
 
-    def place(self, screen: pg.display, x_position: int, y_position: int):
-        screen_width, screen_height = screen.get_size()
+    def set_position(self, x_position: int, y_position: int):
+        screen_width, screen_height = self.screen.get_size()
         image_width, image_height = self.image.get_size()
 
         min_x_position = SCREEN_PADDING
@@ -43,16 +44,18 @@ class Sprite:
             raise ValueError(f'{y_position=}, correct values are {min_y_position}...{max_y_position}')
 
         self.x_position, self.y_position = x_position, y_position
-        screen.blit(self.image, (self.x_position, self.y_position))
+        self.draw()
 
-    def place_randomly(self, screen: pg.display):
-        screen_width, screen_height = screen.get_size()
+    def set_random_position(self):
+        screen_width, screen_height = self.screen.get_size()
         image_width, image_height = self.image.get_size()
 
         self.x_position = randint(SCREEN_PADDING, screen_width - SCREEN_PADDING - image_width // 2)
         self.y_position = randint(SCREEN_PADDING, screen_height - SCREEN_PADDING - image_height // 2)
+        self.draw()
 
-        screen.blit(self.image, (self.x_position, self.y_position))
+    def draw(self):
+        self.screen.blit(self.image, (self.x_position, self.y_position))
 
 
 def main():
@@ -64,24 +67,36 @@ def main():
     grass = pg.image.load(Path('graphics', 'grass.png'))
     tile_background(screen, grass)
 
-    cherry = Sprite(Path('graphics', 'cherry.png'))
-    cherry.place_randomly(screen)
+    cherry = Sprite(screen, Path('graphics', 'cherry.png'))
+    cherry.set_random_position()
+
+    ghost = Sprite(screen, Path('graphics', 'ghost.png'))
+    ghost.set_random_position()
 
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 pg.quit()
                 exit()
-            if event.type == pg.KEYDOWN:
+
+            keys = pg.key.get_pressed()
+
+            if keys[pg.K_w]:
                 tile_background(screen, grass)
-                if event.key == pg.K_q:
-                    cherry.place(screen, -42, -322)
-                if event.key == pg.K_w:
-                    cherry.place(screen, 100, 100)
-                    print(f'Setting a cherry position to x={cherry.x_position}, y={cherry.y_position}')
-                if event.key == pg.K_e:
-                    cherry.place_randomly(screen)
-                    print(f'Randomly setting a cherry position to x={cherry.x_position}, y={cherry.y_position}')
+                cherry.draw()
+                ghost.set_position(ghost.x_position, ghost.y_position - 4)
+            if keys[pg.K_a]:
+                tile_background(screen, grass)
+                cherry.draw()
+                ghost.set_position(ghost.x_position - 4, ghost.y_position)
+            if keys[pg.K_s]:
+                tile_background(screen, grass)
+                cherry.draw()
+                ghost.set_position(ghost.x_position, ghost.y_position + 4)
+            if keys[pg.K_d]:
+                tile_background(screen, grass)
+                cherry.draw()
+                ghost.set_position(ghost.x_position + 4, ghost.y_position)
 
         pg.display.update()
         clock.tick(FRAMERATE_LIMIT)
