@@ -20,14 +20,24 @@ def tile_background(screen: pg.display, image: pg.Surface) -> None:
             screen.blit(image, (x * image_width, y * image_height))
 
 
-def place_image_randomly(screen: pg.display, image: pg.Surface) -> None:
-    screen_width, screen_height = screen.get_size()
-    image_width, image_height = image.get_size()
+class Sprite:
+    def __init__(self, filepath: Path):
+        self.image = pg.image.load(filepath)
+        self.x_position = None
+        self.y_position = None
 
-    screen.blit(image, (
-        randint(SCREEN_PADDING, screen_width - SCREEN_PADDING - image_width // 2),
-        randint(SCREEN_PADDING, screen_height - SCREEN_PADDING - image_height // 2)
-    ))
+    def place(self, screen: pg.display, x_position: int, y_position: int):
+        self.x_position, self.y_position = x_position, y_position
+        screen.blit(self.image, (self.x_position, self.y_position))
+
+    def place_randomly(self, screen: pg.display):
+        screen_width, screen_height = screen.get_size()
+        image_width, image_height = self.image.get_size()
+
+        self.x_position = randint(SCREEN_PADDING, screen_width - SCREEN_PADDING - image_width // 2)
+        self.y_position = randint(SCREEN_PADDING, screen_height - SCREEN_PADDING - image_height // 2)
+
+        screen.blit(self.image, (self.x_position, self.y_position))
 
 
 def main():
@@ -39,8 +49,8 @@ def main():
     grass = pg.image.load(Path('graphics', 'grass.png'))
     tile_background(screen, grass)
 
-    cherry = pg.transform.scale(pg.image.load(Path('graphics', 'cherry.png')), (50, 50))
-    place_image_randomly(screen, cherry)
+    cherry = Sprite(Path('graphics', 'cherry.png'))
+    cherry.place_randomly(screen)
 
     while True:
         for event in pg.event.get():
@@ -48,12 +58,14 @@ def main():
                 pg.quit()
                 exit()
             if event.type == pg.KEYDOWN:
+                tile_background(screen, grass)
                 if event.key == pg.K_a:
-                    place_image_randomly(screen, cherry)
-                    print('Randomly placing another cherry')
+                    cherry.place_randomly(screen)
+                    print(f'Randomly setting a cherry position to x={cherry.x_position=}, y={cherry.y_position=}')
 
         pg.display.update()
         clock.tick(FRAMERATE_LIMIT)
+
 
 if __name__ == '__main__':
     main()
