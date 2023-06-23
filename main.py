@@ -7,7 +7,7 @@ from settings import *
 
 def main():
     pg.init()
-    pg.display.set_caption('Simple Game')
+    pg.display.set_caption(SCREEN_CAPTION)
     screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pg.time.Clock()
 
