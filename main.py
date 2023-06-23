@@ -1,6 +1,6 @@
-import sys
-import math
-import pathlib
+from sys import exit
+from math import ceil
+from pathlib import Path
 
 import pygame as pg
 
@@ -11,7 +11,7 @@ def draw_ground(screen: pg.Surface, ground_surface: pg.Surface) -> None:
     screen_width, screen_height = screen.get_size()
     ground_width, ground_height = ground_surface.get_size()
 
-    tiles_count = math.ceil(screen_width / ground_width)
+    tiles_count = ceil(screen_width / ground_width)
 
     match round(screen_height / ground_height):
         case 2:
@@ -31,20 +31,20 @@ def main():
     screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pg.time.Clock()
 
-    font = pg.font.Font(pathlib.Path('graphics', 'fonts', 'Pixeltype.ttf'), 32)
+    font = pg.font.Font(Path('graphics', 'fonts', 'Pixeltype.ttf'), 32)
     font_surface = font.render('Simple Game', False, 'black')
     font_rect = font_surface.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 8))
 
     sky_surface = pg.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
     sky_surface.fill('skyblue')
 
-    ground_surface = pg.image.load(pathlib.Path('graphics', 'ground.png')).convert()
+    ground_surface = pg.image.load(Path('graphics', 'ground.png')).convert()
 
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 pg.quit()
-                sys.exit()
+                exit()
 
         screen.blit(sky_surface, (0, 0))
         draw_ground(screen, ground_surface)
