@@ -1,5 +1,19 @@
+import sys
+
+import pygame as pg
+
+
 def main():
-    print('Hello, World!')
+    pg.init()
+    screen = pg.display.set_mode((720, 480))
+
+    while True:
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                pg.quit()
+                sys.exit()
+
+        pg.display.update()
 
 
 if __name__ == '__main__':
