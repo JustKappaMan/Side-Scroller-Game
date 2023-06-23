@@ -27,7 +27,7 @@ def draw_ground(screen: pg.Surface, ground_surface: pg.Surface) -> None:
 
 def main():
     pg.init()
-    pg.display.set_caption(SCREEN_CAPTION)
+    pg.display.set_caption('Simple Game')
     screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pg.time.Clock()
 
