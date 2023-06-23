@@ -31,11 +31,14 @@ def main():
     screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pg.time.Clock()
 
+    font = pg.font.Font(pathlib.Path('graphics', 'fonts', 'Pixeltype.ttf'), 32)
+    font_surface = font.render('Simple Game', False, 'black')
+    font_rect = font_surface.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 8))
+
     sky_surface = pg.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
     sky_surface.fill('skyblue')
 
     ground_surface = pg.image.load(pathlib.Path('graphics', 'ground.png')).convert()
-    draw_ground(screen, ground_surface)
 
     while True:
         for event in pg.event.get():
@@ -45,6 +48,7 @@ def main():
 
         screen.blit(sky_surface, (0, 0))
         draw_ground(screen, ground_surface)
+        screen.blit(font_surface, font_rect)
 
         pg.display.update()
         clock.tick(MAX_FRAMERATE)
