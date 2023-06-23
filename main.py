@@ -2,11 +2,13 @@ import sys
 
 import pygame as pg
 
+from settings import *
+
 
 def main():
     pg.init()
-    screen = pg.display.set_mode((720, 480))
     pg.display.set_caption('Simple Game')
+    screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pg.time.Clock()
 
     while True:
@@ -16,7 +18,7 @@ def main():
                 sys.exit()
 
         pg.display.update()
-        clock.tick(60)
+        clock.tick(MAX_FRAMERATE)
 
 
 if __name__ == '__main__':
