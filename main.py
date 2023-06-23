@@ -6,6 +6,7 @@ import pygame as pg
 def main():
     pg.init()
     screen = pg.display.set_mode((720, 480))
+    pg.display.set_caption('Simple Game')
 
     while True:
         for event in pg.event.get():
