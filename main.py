@@ -59,6 +59,11 @@ def main():
                 pg.quit()
                 exit()
 
+            if event.type == pg.KEYDOWN:
+                if event.key == pg.K_ESCAPE:
+                    pg.quit()
+                    exit()
+
         sky.render()
         ground.render()
 
