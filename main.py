@@ -40,6 +40,9 @@ def main():
 
     ground_surface = pg.image.load(Path('graphics', 'ground.png')).convert()
 
+    ghost_surface = pg.image.load(Path('graphics', 'ghost.png')).convert_alpha()
+    ghost_x_pos, ghost_y_pos = 600, 350
+
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -49,6 +52,11 @@ def main():
         screen.blit(sky_surface, (0, 0))
         draw_ground(screen, ground_surface)
         screen.blit(font_surface, font_rect)
+
+        ghost_x_pos -= 4
+        if ghost_x_pos < -64:
+            ghost_x_pos = 800
+        screen.blit(ghost_surface, (ghost_x_pos, ghost_y_pos))
 
         pg.display.update()
         clock.tick(MAX_FRAMERATE)
