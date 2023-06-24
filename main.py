@@ -7,22 +7,27 @@ import pygame as pg
 from settings import *
 
 
-def draw_ground(screen: pg.Surface, ground_surface: pg.Surface) -> None:
-    screen_width, screen_height = screen.get_size()
-    ground_width, ground_height = ground_surface.get_size()
+class Ground:
+    def __init__(self, screen: pg.Surface, surface: pg.Surface):
+        self.screen = screen
+        self.screen_width, self.screen_height = self.screen.get_size()
 
-    tiles_count = ceil(screen_width / ground_width)
+        self.surface = surface
+        self.surface_width, self.surface_height = self.surface.get_size()
 
-    match round(screen_height / ground_height):
-        case 2:
-            ground_y = screen_height - ground_height // 4
-        case 3:
-            ground_y = screen_height - ground_height // 2
-        case _:
-            ground_y = screen_height - ground_height
+        match round(self.screen_height / self.surface_height):
+            case 2:
+                self.surface_y_pos = self.screen_height - self.surface_height // 4
+            case 3:
+                self.surface_y_pos = self.screen_height - self.surface_height // 2
+            case _:
+                self.surface_y_pos = self.screen_height - self.surface_height
 
-    for i in range(tiles_count):
-        screen.blit(ground_surface, (i * ground_width, ground_y))
+        self.surfaces_count = ceil(self.screen_width / self.surface_width)
+
+    def render(self):
+        for i in range(self.surfaces_count):
+            self.screen.blit(self.surface, (i * self.surface_width, self.surface_y_pos))
 
 
 def main():
@@ -38,10 +43,10 @@ def main():
     sky_surface = pg.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
     sky_surface.fill('skyblue')
 
-    ground_surface = pg.image.load(Path('graphics', 'ground.png')).convert()
+    ground = Ground(screen, pg.image.load(Path('graphics', 'ground.png')).convert())
 
     ghost_surface = pg.image.load(Path('graphics', 'ghost.png')).convert_alpha()
-    ghost_x_pos, ghost_y_pos = 600, 350
+    ghost_rect = ghost_surface.get_rect(midbottom=(600, ground.surface_y_pos))
 
     while True:
         for event in pg.event.get():
@@ -50,13 +55,13 @@ def main():
                 exit()
 
         screen.blit(sky_surface, (0, 0))
-        draw_ground(screen, ground_surface)
+        ground.render()
         screen.blit(font_surface, font_rect)
 
-        ghost_x_pos -= 4
-        if ghost_x_pos < -64:
-            ghost_x_pos = 800
-        screen.blit(ghost_surface, (ghost_x_pos, ghost_y_pos))
+        ghost_rect.x -= 4
+        if ghost_rect.x < -64:
+            ghost_rect.x = 800
+        screen.blit(ghost_surface, ghost_rect)
 
         pg.display.update()
         clock.tick(MAX_FRAMERATE)
