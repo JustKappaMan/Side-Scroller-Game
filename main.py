@@ -47,10 +47,6 @@ def main():
     screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pg.time.Clock()
 
-    font = pg.font.Font(Path('graphics', 'fonts', 'Pixeltype.ttf'), 32)
-    font_surface = font.render('Simple Game', False, 'black')
-    font_rect = font_surface.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 8))
-
     sky = Sky(screen)
     ground = Ground(screen, pg.image.load(Path('graphics', 'ground.png')).convert())
 
@@ -65,7 +61,6 @@ def main():
 
         sky.render()
         ground.render()
-        screen.blit(font_surface, font_rect)
 
         ghost_rect.x -= 4
         if ghost_rect.x < -64:
