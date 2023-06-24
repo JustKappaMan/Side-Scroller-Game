@@ -7,6 +7,17 @@ import pygame as pg
 from settings import *
 
 
+class Sky:
+    def __init__(self, screen: pg.Surface):
+        self.screen = screen
+        self.surface = pg.Surface(self.screen.get_size())
+        self.surface.fill('skyblue')
+        self.surface_pos = (0, 0)
+
+    def render(self):
+        self.screen.blit(self.surface, self.surface_pos)
+
+
 class Ground:
     def __init__(self, screen: pg.Surface, surface: pg.Surface):
         self.screen = screen
@@ -40,9 +51,7 @@ def main():
     font_surface = font.render('Simple Game', False, 'black')
     font_rect = font_surface.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 8))
 
-    sky_surface = pg.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-    sky_surface.fill('skyblue')
-
+    sky = Sky(screen)
     ground = Ground(screen, pg.image.load(Path('graphics', 'ground.png')).convert())
 
     ghost_surface = pg.image.load(Path('graphics', 'ghost.png')).convert_alpha()
@@ -54,7 +63,7 @@ def main():
                 pg.quit()
                 exit()
 
-        screen.blit(sky_surface, (0, 0))
+        sky.render()
         ground.render()
         screen.blit(font_surface, font_rect)
 
