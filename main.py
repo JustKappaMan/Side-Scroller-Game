@@ -55,7 +55,7 @@ def main():
     ground = Ground(screen, pg.image.load(Path('graphics', 'ground.png')).convert())
 
     ghost_surface = pg.image.load(Path('graphics', 'ghost.png')).convert_alpha()
-    ghost_rect = ghost_surface.get_rect(midbottom=(600, ground.surface_y_pos))
+    ghost_rect = ghost_surface.get_rect(midbottom=(screen.get_width() + 64, ground.surface_y_pos))
 
     while True:
         for event in pg.event.get():
@@ -69,7 +69,7 @@ def main():
 
         ghost_rect.x -= 4
         if ghost_rect.x < -64:
-            ghost_rect.x = 800
+            ghost_rect.x = screen.get_width() + 64
         screen.blit(ghost_surface, ghost_rect)
 
         pg.display.update()
