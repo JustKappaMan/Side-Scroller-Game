@@ -11,7 +11,7 @@ class Sky:
     def __init__(self, screen: pg.Surface):
         self.screen = screen
         self.surface = pg.Surface(self.screen.get_size())
-        self.surface.fill('skyblue')
+        self.surface.fill(pg.color.Color('skyblue'))
         self.surface_pos = (0, 0)
 
     def render(self):
@@ -46,7 +46,7 @@ class FPSCounter:
         self.screen = screen
         self.clock = clock
         self.font = pg.font.SysFont('Arial', 16, bold=True)
-        self.color = 'red'
+        self.color = pg.color.Color('red')
         self.position = (8, 8)
         self.fps = None
 
