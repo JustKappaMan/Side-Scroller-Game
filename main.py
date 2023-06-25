@@ -41,6 +41,20 @@ class Ground:
             self.screen.blit(self.surface, (i * self.surface_width, self.surface_y_pos))
 
 
+class FPSCounter:
+    def __init__(self, screen: pg.Surface, clock: pg.time.Clock):
+        self.screen = screen
+        self.clock = clock
+        self.font = pg.font.SysFont('Arial', 16, bold=True)
+        self.color = 'red'
+        self.position = (8, 8)
+        self.fps = None
+
+    def render(self):
+        self.fps = f'{int(self.clock.get_fps())}'
+        self.screen.blit(self.font.render(self.fps, True, self.color), self.position)
+
+
 def main():
     pg.init()
     pg.display.set_caption('Simple Game')
@@ -52,6 +66,8 @@ def main():
 
     ghost_surface = pg.image.load(Path('graphics', 'ghost.png')).convert_alpha()
     ghost_rect = ghost_surface.get_rect(midbottom=(screen.get_width() + 64, ground.surface_y_pos))
+
+    fps_counter = FPSCounter(screen, clock)
 
     while True:
         for event in pg.event.get():
@@ -71,6 +87,8 @@ def main():
         if ghost_rect.x < -64:
             ghost_rect.x = screen.get_width() + 64
         screen.blit(ghost_surface, ghost_rect)
+
+        fps_counter.render()
 
         pg.display.update()
         clock.tick(MAX_FRAMERATE)
