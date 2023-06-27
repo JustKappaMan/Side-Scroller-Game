@@ -10,7 +10,7 @@ from settings import *
 class Sky:
     def __init__(self, screen: pg.Surface):
         self.screen = screen
-        self.surface = pg.Surface(self.screen.get_size())
+        self.surface = pg.Surface(screen.get_size())
         self.surface.fill(pg.color.Color('skyblue'))
         self.surface_pos = (0, 0)
 
@@ -21,10 +21,10 @@ class Sky:
 class Ground:
     def __init__(self, screen: pg.Surface, surface: pg.Surface):
         self.screen = screen
-        self.screen_width, self.screen_height = self.screen.get_size()
+        self.screen_width, self.screen_height = screen.get_size()
 
         self.surface = surface
-        self.surface_width, self.surface_height = self.surface.get_size()
+        self.surface_width, self.surface_height = surface.get_size()
 
         match round(self.screen_height / self.surface_height):
             case 2:
