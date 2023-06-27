@@ -65,7 +65,7 @@ def main():
     ground = Ground(screen, pg.image.load(Path('graphics', 'ground.png')).convert())
 
     player_surface = pg.image.load(Path('graphics', 'player.png')).convert()
-    player_rect = player_surface.get_rect(midbottom=(128, ground.surface_y_pos))
+    player_rect = player_surface.get_rect(midbottom=(64, ground.surface_y_pos))
 
     ghost_surface = pg.image.load(Path('graphics', 'ghost.png')).convert_alpha()
     ghost_rect = ghost_surface.get_rect(midbottom=(screen.get_width() + 64, ground.surface_y_pos))
