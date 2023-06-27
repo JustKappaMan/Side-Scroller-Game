@@ -67,6 +67,9 @@ def main():
     ghost_surface = pg.image.load(Path('graphics', 'ghost.png')).convert_alpha()
     ghost_rect = ghost_surface.get_rect(midbottom=(screen.get_width() + 64, ground.surface_y_pos))
 
+    player_surface = pg.image.load(Path('graphics', 'player.png')).convert()
+    player_rect = player_surface.get_rect(midbottom=(128, ground.surface_y_pos))
+
     fps_counter = FPSCounter(screen, clock)
 
     while True:
@@ -87,6 +90,8 @@ def main():
         if ghost_rect.x < -64:
             ghost_rect.x = screen.get_width() + 64
         screen.blit(ghost_surface, ghost_rect)
+
+        screen.blit(player_surface, player_rect)
 
         fps_counter.render()
 
