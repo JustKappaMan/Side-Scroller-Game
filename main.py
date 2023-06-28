@@ -66,6 +66,7 @@ def main():
 
     player_surf = pg.image.load(Path('graphics', 'player.png')).convert()
     player_rect = player_surf.get_rect(midbottom=(64, ground.surf_y_pos))
+    player_gravity = 0
 
     enemy_surf = pg.image.load(Path('graphics', 'enemy.png')).convert()
     enemy_rect = enemy_surf.get_rect(midbottom=(screen.get_width() + 64, ground.surf_y_pos))
@@ -82,10 +83,16 @@ def main():
                 if event.key == pg.K_ESCAPE:
                     pg.quit()
                     exit()
+                if event.key == pg.K_SPACE:
+                    player_gravity = -20
 
         sky.render()
         ground.render()
 
+        player_gravity += 1
+        player_rect.y += player_gravity
+        if player_rect.bottom >= ground.surf_y_pos:
+            player_rect.bottom = ground.surf_y_pos
         screen.blit(player_surf, player_rect)
 
         enemy_rect.x -= 4
