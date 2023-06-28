@@ -67,8 +67,8 @@ def main():
     player_surf = pg.image.load(Path('graphics', 'player.png')).convert()
     player_rect = player_surf.get_rect(midbottom=(64, ground.surf_y_pos))
 
-    ghost_surf = pg.image.load(Path('graphics', 'enemy.png')).convert()
-    ghost_rect = ghost_surf.get_rect(midbottom=(screen.get_width() + 64, ground.surf_y_pos))
+    enemy_surf = pg.image.load(Path('graphics', 'enemy.png')).convert()
+    enemy_rect = enemy_surf.get_rect(midbottom=(screen.get_width() + 64, ground.surf_y_pos))
 
     fps_counter = FPSCounter(screen, clock)
 
@@ -88,10 +88,10 @@ def main():
 
         screen.blit(player_surf, player_rect)
 
-        ghost_rect.x -= 4
-        if ghost_rect.x < -64:
-            ghost_rect.x = screen.get_width() + 64
-        screen.blit(ghost_surf, ghost_rect)
+        enemy_rect.x -= 4
+        if enemy_rect.x < -64:
+            enemy_rect.x = screen.get_width() + 64
+        screen.blit(enemy_surf, enemy_rect)
 
         fps_counter.render()
 
