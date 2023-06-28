@@ -10,35 +10,35 @@ from settings import *
 class Sky:
     def __init__(self, screen: pg.Surface):
         self.screen = screen
-        self.surface = pg.Surface(screen.get_size())
-        self.surface.fill(pg.color.Color('skyblue'))
-        self.surface_pos = (0, 0)
+        self.surf = pg.Surface(screen.get_size())
+        self.surf.fill(pg.color.Color('skyblue'))
+        self.surf_pos = (0, 0)
 
     def render(self):
-        self.screen.blit(self.surface, self.surface_pos)
+        self.screen.blit(self.surf, self.surf_pos)
 
 
 class Ground:
-    def __init__(self, screen: pg.Surface, surface: pg.Surface):
+    def __init__(self, screen: pg.Surface, surf: pg.Surface):
         self.screen = screen
         self.screen_width, self.screen_height = screen.get_size()
 
-        self.surface = surface
-        self.surface_width, self.surface_height = surface.get_size()
+        self.surf = surf
+        self.surf_width, self.surf_height = surf.get_size()
 
-        match round(self.screen_height / self.surface_height):
+        match round(self.screen_height / self.surf_height):
             case 2:
-                self.surface_y_pos = self.screen_height - self.surface_height // 4
+                self.surf_y_pos = self.screen_height - self.surf_height // 4
             case 3:
-                self.surface_y_pos = self.screen_height - self.surface_height // 2
+                self.surf_y_pos = self.screen_height - self.surf_height // 2
             case _:
-                self.surface_y_pos = self.screen_height - self.surface_height
+                self.surf_y_pos = self.screen_height - self.surf_height
 
-        self.surfaces_count = ceil(self.screen_width / self.surface_width)
+        self.surfs_count = ceil(self.screen_width / self.surf_width)
 
     def render(self):
-        for i in range(self.surfaces_count):
-            self.screen.blit(self.surface, (i * self.surface_width, self.surface_y_pos))
+        for i in range(self.surfs_count):
+            self.screen.blit(self.surf, (i * self.surf_width, self.surf_y_pos))
 
 
 class FPSCounter:
@@ -64,11 +64,11 @@ def main():
     sky = Sky(screen)
     ground = Ground(screen, pg.image.load(Path('graphics', 'ground.png')).convert())
 
-    player_surface = pg.image.load(Path('graphics', 'player.png')).convert()
-    player_rect = player_surface.get_rect(midbottom=(64, ground.surface_y_pos))
+    player_surf = pg.image.load(Path('graphics', 'player.png')).convert()
+    player_rect = player_surf.get_rect(midbottom=(64, ground.surf_y_pos))
 
-    ghost_surface = pg.image.load(Path('graphics', 'ghost.png')).convert_alpha()
-    ghost_rect = ghost_surface.get_rect(midbottom=(screen.get_width() + 64, ground.surface_y_pos))
+    ghost_surf = pg.image.load(Path('graphics', 'ghost.png')).convert_alpha()
+    ghost_rect = ghost_surf.get_rect(midbottom=(screen.get_width() + 64, ground.surf_y_pos))
 
     fps_counter = FPSCounter(screen, clock)
 
@@ -86,12 +86,12 @@ def main():
         sky.render()
         ground.render()
 
-        screen.blit(player_surface, player_rect)
+        screen.blit(player_surf, player_rect)
 
         ghost_rect.x -= 4
         if ghost_rect.x < -64:
             ghost_rect.x = screen.get_width() + 64
-        screen.blit(ghost_surface, ghost_rect)
+        screen.blit(ghost_surf, ghost_rect)
 
         fps_counter.render()
 
