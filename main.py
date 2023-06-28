@@ -61,6 +61,8 @@ def main():
     screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pg.time.Clock()
 
+    game_is_active = True
+
     sky = Sky(screen)
     ground = Ground(screen, pg.image.load(Path('graphics', 'ground.png')).convert())
 
@@ -86,21 +88,27 @@ def main():
                 if event.key == pg.K_SPACE and player_rect.bottom >= ground.surf_y_pos:
                     player_gravity = -20
 
-        sky.render()
-        ground.render()
+        if game_is_active:
+            sky.render()
+            ground.render()
 
-        player_gravity += 1
-        player_rect.y += player_gravity
-        if player_rect.bottom >= ground.surf_y_pos:
-            player_rect.bottom = ground.surf_y_pos
-        screen.blit(player_surf, player_rect)
+            player_gravity += 1
+            player_rect.y += player_gravity
+            if player_rect.bottom >= ground.surf_y_pos:
+                player_rect.bottom = ground.surf_y_pos
+            screen.blit(player_surf, player_rect)
 
-        enemy_rect.x -= 4
-        if enemy_rect.x < -64:
-            enemy_rect.x = screen.get_width() + 64
-        screen.blit(enemy_surf, enemy_rect)
+            enemy_rect.x -= 4
+            if enemy_rect.x < -64:
+                enemy_rect.x = screen.get_width() + 64
+            screen.blit(enemy_surf, enemy_rect)
 
-        fps_counter.render()
+            if enemy_rect.colliderect(player_rect):
+                game_is_active = False
+
+            fps_counter.render()
+        else:
+            screen.fill(pg.color.Color('red'))
 
         pg.display.update()
         clock.tick(MAX_FRAMERATE)
