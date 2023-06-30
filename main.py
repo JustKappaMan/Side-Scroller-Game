@@ -55,6 +55,23 @@ class FPSCounter:
         self.screen.blit(self.font.render(self.fps, True, self.color), self.position)
 
 
+class ScoreCounter:
+    def __init__(self, screen: pg.Surface):
+        self.screen = screen
+        self.font = pg.font.SysFont('Arial', 16, bold=True)
+        self.color = pg.color.Color('darkgreen')
+        self.position = (screen.get_width() - 8, 8)
+        self.score = None
+        self.surf = None
+        self.rect = None
+
+    def render(self):
+        self.score = pg.time.get_ticks()
+        self.surf = self.font.render(f'{self.score}', True, self.color)
+        self.rect = self.surf.get_rect(topright=self.position)
+        self.screen.blit(self.surf, self.rect)
+
+
 class GameOverScreen:
     def __init__(self, screen: pg.Surface):
         self.screen = screen
@@ -87,7 +104,7 @@ def main():
     enemy_rect = enemy_surf.get_rect(midbottom=(screen.get_width() + 64, ground.surf_y_pos))
 
     fps_counter = FPSCounter(screen, clock)
-
+    score_counter = ScoreCounter(screen)
     game_over_screen = GameOverScreen(screen)
 
     while True:
@@ -129,6 +146,7 @@ def main():
                 game_is_active = False
 
             fps_counter.render()
+            score_counter.render()
         else:
             game_over_screen.render()
 
