@@ -45,6 +45,8 @@ class FPSCounter:
         self.color = pg.color.Color('red')
         self.position = (screen.get_width() - 8, 8)
         self.fps = None
+        self.surf = None
+        self.rect = None
 
     def render(self):
         self.fps = f'{int(self.clock.get_fps())}'
