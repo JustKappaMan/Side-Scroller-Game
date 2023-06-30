@@ -85,8 +85,15 @@ def main():
                 if event.key == pg.K_ESCAPE:
                     pg.quit()
                     exit()
-                if event.key == pg.K_SPACE and player_rect.bottom >= ground.surf_y_pos:
-                    player_gravity = -22
+
+            if game_is_active:
+                if event.type == pg.KEYDOWN:
+                    if event.key == pg.K_SPACE and player_rect.bottom >= ground.surf_y_pos:
+                        player_gravity = -22
+            else:
+                if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
+                    enemy_rect.x = screen.get_width() + 64
+                    game_is_active = True
 
         if game_is_active:
             sky.render()
