@@ -61,15 +61,19 @@ class ScoreCounter:
         self.font = pg.font.SysFont('Arial', 16, bold=True)
         self.color = pg.color.Color('darkgreen')
         self.position = (screen.get_width() - 8, 8)
+        self.start_score = 0
         self.score = None
         self.surf = None
         self.rect = None
 
     def render(self):
-        self.score = pg.time.get_ticks()
+        self.score = pg.time.get_ticks() - self.start_score
         self.surf = self.font.render(f'{self.score}', True, self.color)
         self.rect = self.surf.get_rect(topright=self.position)
         self.screen.blit(self.surf, self.rect)
+
+    def refresh(self):
+        self.start_score = pg.time.get_ticks()
 
 
 class GameOverScreen:
@@ -125,6 +129,7 @@ def main():
             else:
                 if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
                     enemy_rect.x = screen.get_width() + 64
+                    score_counter.refresh()
                     game_is_active = True
 
         if game_is_active:
