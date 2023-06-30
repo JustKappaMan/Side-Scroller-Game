@@ -63,13 +63,13 @@ class ScoreCounter:
         self.rect = None
 
     def render(self):
-        self.score = pg.time.get_ticks() - self.start_score
+        self.score = pg.time.get_ticks() // 100 - self.start_score
         self.surf = self.font.render(f'{self.score}', True, self.color)
         self.rect = self.surf.get_rect(topright=self.position)
         self.screen.blit(self.surf, self.rect)
 
     def refresh(self):
-        self.start_score = pg.time.get_ticks()
+        self.start_score = pg.time.get_ticks() // 100
 
 
 class GameOverScreen:
