@@ -69,7 +69,7 @@ class ScoreCounter:
 
     def render(self):
         self.current_score = pg.time.get_ticks() // self.score_divisor - self.start_score
-        self.surf = self.font.render(f'{self.current_score}', True, self.color)
+        self.surf = self.font.render(f'Score: {self.current_score}', True, self.color)
         self.rect = self.surf.get_rect(topleft=self.position)
         self.screen.blit(self.surf, self.rect)
 
