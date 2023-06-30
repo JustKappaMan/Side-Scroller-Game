@@ -43,12 +43,14 @@ class FPSCounter:
         self.clock = clock
         self.font = pg.font.SysFont('Arial', 16, bold=True)
         self.color = pg.color.Color('red')
-        self.position = (8, 8)
+        self.position = (screen.get_width() - 8, 8)
         self.fps = None
 
     def render(self):
         self.fps = f'{int(self.clock.get_fps())}'
-        self.screen.blit(self.font.render(self.fps, True, self.color), self.position)
+        self.surf = self.font.render(self.fps, True, self.color)
+        self.rect = self.surf.get_rect(topright=self.position)
+        self.screen.blit(self.surf, self.rect)
 
 
 class ScoreCounter:
@@ -56,7 +58,7 @@ class ScoreCounter:
         self.screen = screen
         self.font = pg.font.SysFont('Arial', 16, bold=True)
         self.color = pg.color.Color('darkgreen')
-        self.position = (screen.get_width() - 8, 8)
+        self.position = (8, 8)
         self.start_score = 0
         self.current_score = None
         self.score_divisor = 100
@@ -66,7 +68,7 @@ class ScoreCounter:
     def render(self):
         self.current_score = pg.time.get_ticks() // self.score_divisor - self.start_score
         self.surf = self.font.render(f'{self.current_score}', True, self.color)
-        self.rect = self.surf.get_rect(topright=self.position)
+        self.rect = self.surf.get_rect(topleft=self.position)
         self.screen.blit(self.surf, self.rect)
 
     def refresh(self):
