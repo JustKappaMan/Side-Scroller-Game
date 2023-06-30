@@ -21,24 +21,20 @@ class Sky:
 class Ground:
     def __init__(self, screen: pg.Surface, surf: pg.Surface):
         self.screen = screen
-        self.screen_width, self.screen_height = screen.get_size()
-
         self.surf = surf
-        self.surf_width, self.surf_height = surf.get_size()
+        self.surfs_count = ceil(screen.get_width() / surf.get_width())
 
-        match round(self.screen_height / self.surf_height):
+        match round(screen.get_height() / self.surf.get_height()):
             case 2:
-                self.surf_y_pos = self.screen_height - self.surf_height // 4
+                self.surf_y_pos = screen.get_height() - surf.get_height() // 4
             case 3:
-                self.surf_y_pos = self.screen_height - self.surf_height // 2
+                self.surf_y_pos = screen.get_height() - surf.get_height() // 2
             case _:
-                self.surf_y_pos = self.screen_height - self.surf_height
-
-        self.surfs_count = ceil(self.screen_width / self.surf_width)
+                self.surf_y_pos = screen.get_height() - surf.get_height()
 
     def render(self):
         for i in range(self.surfs_count):
-            self.screen.blit(self.surf, (i * self.surf_width, self.surf_y_pos))
+            self.screen.blit(self.surf, (i * self.surf.get_width(), self.surf_y_pos))
 
 
 class FPSCounter:
