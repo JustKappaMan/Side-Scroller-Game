@@ -62,7 +62,7 @@ class ScoreCounter:
         self.color = pg.color.Color('darkgreen')
         self.position = (8, 8)
         self.start_score = 0
-        self.current_score = None
+        self.current_score = 0
         self.score_divisor = 100
         self.surf = None
         self.rect = None
@@ -75,6 +75,19 @@ class ScoreCounter:
 
     def refresh(self):
         self.start_score = pg.time.get_ticks() // self.score_divisor
+
+
+class StartScreen:
+    def __init__(self, screen: pg.Surface):
+        self.screen = screen
+        self.background_color = pg.color.Color('darkgreen')
+        self.font = pg.font.SysFont('Arial', 32, bold=True)
+        self.font_surf = self.font.render('Press Space to run', True, pg.color.Color('yellow'))
+        self.font_rect = self.font_surf.get_rect(center=(screen.get_width() // 2, screen.get_height() // 2))
+
+    def render(self):
+        self.screen.fill(self.background_color)
+        self.screen.blit(self.font_surf, self.font_rect)
 
 
 class GameOverScreen:
@@ -96,7 +109,7 @@ def main():
     screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pg.time.Clock()
 
-    game_is_active = True
+    game_is_active = False
 
     sky = Sky(screen)
     ground = Ground(screen, pg.image.load(Path('graphics', 'ground.png')).convert())
@@ -110,6 +123,7 @@ def main():
 
     fps_counter = FPSCounter(screen, clock)
     score_counter = ScoreCounter(screen)
+    start_screen = StartScreen(screen)
     game_over_screen = GameOverScreen(screen)
 
     while True:
@@ -149,7 +163,10 @@ def main():
             fps_counter.render()
             score_counter.render()
         else:
-            game_over_screen.render()
+            if score_counter.current_score == 0:
+                start_screen.render()
+            else:
+                game_over_screen.render()
 
         pg.display.update()
         clock.tick(MAX_FRAMERATE)
