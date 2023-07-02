@@ -72,18 +72,18 @@ class Sky:
 
 
 class Ground:
-    def __init__(self, screen: pg.Surface, surf: pg.Surface):
+    def __init__(self, screen: pg.Surface):
         self.screen = screen
-        self.surf = surf
-        self.surfs_count = ceil(screen.get_width() / surf.get_width())
+        self.surf = pg.image.load(Path('graphics', 'ground.png')).convert()
+        self.surfs_count = ceil(screen.get_width() / self.surf.get_width())
 
         match round(screen.get_height() / self.surf.get_height()):
             case 2:
-                self.surf_y_pos = screen.get_height() - surf.get_height() // 4
+                self.surf_y_pos = screen.get_height() - self.surf.get_height() // 4
             case 3:
-                self.surf_y_pos = screen.get_height() - surf.get_height() // 2
+                self.surf_y_pos = screen.get_height() - self.surf.get_height() // 2
             case _:
-                self.surf_y_pos = screen.get_height() - surf.get_height()
+                self.surf_y_pos = screen.get_height() - self.surf.get_height()
 
     def render(self):
         for i in range(self.surfs_count):
@@ -166,13 +166,14 @@ def main():
     background_music.set_volume(0.5)
     background_music.play(loops=-1)
 
+    start_screen = StartScreen(screen)
+    game_over_screen = GameOverScreen(screen)
+
     sky = Sky(screen)
-    ground = Ground(screen, pg.image.load(Path('graphics', 'ground.png')).convert())
+    ground = Ground(screen)
 
     fps_counter = FPSCounter(screen, clock)
     score_counter = ScoreCounter(screen)
-    start_screen = StartScreen(screen)
-    game_over_screen = GameOverScreen(screen)
 
     player_group = pg.sprite.GroupSingle()
     player_group.add(Player((64, ground.surf_y_pos)))
