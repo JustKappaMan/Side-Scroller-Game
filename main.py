@@ -1,6 +1,7 @@
 from sys import exit
 from math import ceil
 from pathlib import Path
+from random import randint
 
 import pygame as pg
 
@@ -118,13 +119,17 @@ def main():
     player_rect = player_surf.get_rect(midbottom=(64, ground.surf_y_pos))
     player_gravity = 0
 
-    enemy_surf = pg.image.load(Path('graphics', 'enemy.png')).convert()
-    enemy_rect = enemy_surf.get_rect(midbottom=(screen.get_width() + 64, ground.surf_y_pos))
+    running_enemy_surf = pg.image.load(Path('graphics', 'running_enemy.png')).convert()
+    flying_enemy_surf = pg.image.load(Path('graphics', 'flying_enemy.png')).convert()
+    enemies_rects = []
 
     fps_counter = FPSCounter(screen, clock)
     score_counter = ScoreCounter(screen)
     start_screen = StartScreen(screen)
     game_over_screen = GameOverScreen(screen)
+
+    enemy_timer = pg.USEREVENT + 1
+    pg.time.set_timer(enemy_timer, 1800)
 
     while True:
         for event in pg.event.get():
@@ -136,10 +141,19 @@ def main():
                 if event.type == pg.KEYDOWN:
                     if event.key == pg.K_SPACE and player_rect.bottom >= ground.surf_y_pos:
                         player_gravity = -22
+                if event.type == enemy_timer:
+                    if randint(0, 2):
+                        enemies_rects.append(running_enemy_surf.get_rect(midbottom=(
+                            randint(screen.get_width() + 256, screen.get_width() + 512), ground.surf_y_pos)))
+                    else:
+                        enemies_rects.append(flying_enemy_surf.get_rect(midbottom=(
+                            randint(screen.get_width() + 256, screen.get_width() + 512), ground.surf_y_pos - 64)))
             else:
                 if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
-                    enemy_rect.x = screen.get_width() + 64
+                    enemies_rects.clear()
                     score_counter.refresh()
+                    player_gravity = 0
+                    player_rect.midbottom = (64, ground.surf_y_pos)
                     game_is_active = True
 
         if game_is_active:
@@ -152,13 +166,19 @@ def main():
                 player_rect.bottom = ground.surf_y_pos
             screen.blit(player_surf, player_rect)
 
-            enemy_rect.x -= 4
-            if enemy_rect.x < -64:
-                enemy_rect.x = screen.get_width() + 64
-            screen.blit(enemy_surf, enemy_rect)
+            if enemies_rects:
+                for enemy_rect in enemies_rects:
+                    if enemy_rect.colliderect(player_rect):
+                        game_is_active = False
 
-            if enemy_rect.colliderect(player_rect):
-                game_is_active = False
+                    enemy_rect.x -= 4
+
+                    if enemy_rect.bottom == ground.surf_y_pos:
+                        screen.blit(running_enemy_surf, enemy_rect)
+                    else:
+                        screen.blit(flying_enemy_surf, enemy_rect)
+
+                enemies_rects = [enemy_rect for enemy_rect in enemies_rects if enemy_rect.x > -enemy_rect.width]
 
             fps_counter.render()
             score_counter.render()
