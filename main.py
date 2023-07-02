@@ -1,7 +1,7 @@
 from sys import exit
 from math import ceil
 from pathlib import Path
-from random import randint
+from random import randint, choice
 
 import pygame as pg
 
@@ -14,16 +14,21 @@ class Player(pg.sprite.Sprite):
         self.image = pg.image.load(Path('graphics', 'player.png')).convert()
         self.rect = self.image.get_rect(midbottom=initial_position)
         self.initial_position = initial_position
+
         self.gravity = 0
         self.jump_gravity = -22
-        self.jump_sound = pg.mixer.Sound(Path('audio', 'jump.ogg'))
-        self.jump_sound.set_volume(0.5)
+
+        self.jump_sounds = (pg.mixer.Sound(Path('audio', 'jump1.ogg')),
+                            pg.mixer.Sound(Path('audio', 'jump2.ogg')),
+                            pg.mixer.Sound(Path('audio', 'jump3.ogg')))
+        for sound in self.jump_sounds:
+            sound.set_volume(0.5)
 
     def handle_input(self):
         keys = pg.key.get_pressed()
         if keys[pg.K_SPACE] and self.rect.bottom >= self.initial_position[1]:
             self.gravity = self.jump_gravity
-            self.jump_sound.play()
+            choice(self.jump_sounds).play()
 
     def apply_gravity(self):
         self.gravity += 1
