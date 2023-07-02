@@ -179,6 +179,7 @@ def main():
     score_counter = ScoreCounter(screen)
 
     player_group = pg.sprite.GroupSingle()
+    # noinspection PyTypeChecker
     player_group.add(Player((64, ground.surf_y_pos)))
 
     enemies_group = pg.sprite.Group()
@@ -195,6 +196,7 @@ def main():
 
             if game_is_active:
                 if event.type == enemy_timer:
+                    # noinspection PyTypeChecker
                     enemies_group.add(Enemy(ground.surf_y_pos, screen.get_width()))
             else:
                 if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
