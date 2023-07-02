@@ -1,7 +1,7 @@
 from sys import exit
 from math import ceil
 from pathlib import Path
-from random import randint, choice
+from random import randint
 
 import pygame as pg
 
@@ -40,16 +40,14 @@ class Enemy(pg.sprite.Sprite):
     def __init__(self, surf_y_pos: int, screen_width: int):
         super().__init__()
         self.speed = 4
-        self.kind = choice(('running', 'flying'))
-        match self.kind:
-            case 'running':
-                self.image = pg.image.load(Path('graphics', 'running_enemy.png')).convert()
-                self.rect = self.image.get_rect(midbottom=(
-                    randint(screen_width + 256, screen_width + 512), surf_y_pos))
-            case 'flying':
-                self.image = pg.image.load(Path('graphics', 'flying_enemy.png')).convert()
-                self.rect = self.image.get_rect(midbottom=(
-                    randint(screen_width + 256, screen_width + 512), surf_y_pos - 64))
+        if randint(0, 1):
+            self.image = pg.image.load(Path('graphics', 'running_enemy.png')).convert()
+            self.rect = self.image.get_rect(midbottom=(
+                randint(screen_width + 256, screen_width + 512), surf_y_pos))
+        else:
+            self.image = pg.image.load(Path('graphics', 'flying_enemy.png')).convert()
+            self.rect = self.image.get_rect(midbottom=(
+                randint(screen_width + 256, screen_width + 512), surf_y_pos - 64))
 
     def update(self):
         self.rect.x -= self.speed
