@@ -193,6 +193,8 @@ def main():
         if game_is_active:
             sky.render()
             ground.render()
+            fps_counter.render()
+            score_counter.render()
 
             player_group.draw(screen)
             player_group.update()
@@ -200,8 +202,9 @@ def main():
             enemies_group.draw(screen)
             enemies_group.update()
 
-            fps_counter.render()
-            score_counter.render()
+            if pg.sprite.spritecollide(player_group.sprite, enemies_group, False):
+                enemies_group.empty()
+                game_is_active = False
         else:
             if score_counter.current_score == 0:
                 start_screen.render()
