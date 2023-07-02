@@ -1,11 +1,60 @@
 from sys import exit
 from math import ceil
 from pathlib import Path
-from random import randint
+from random import randint, choice
 
 import pygame as pg
 
 from settings import *
+
+
+class Player(pg.sprite.Sprite):
+    def __init__(self, position: tuple[int, int]):
+        super().__init__()
+        self.image = pg.image.load(Path('graphics', 'player.png')).convert()
+        self.rect = self.image.get_rect(midbottom=position)
+        self.gravity = 0
+        self.jump_gravity = -22
+        self.initial_position = position
+
+    def handle_input(self):
+        keys = pg.key.get_pressed()
+        if keys[pg.K_SPACE] and self.rect.bottom >= self.initial_position[1]:
+            self.gravity = self.jump_gravity
+
+    def apply_gravity(self):
+        self.gravity += 1
+        self.rect.y += self.gravity
+        if self.rect.bottom >= self.initial_position[1]:
+            self.rect.bottom = self.initial_position[1]
+
+    def update(self):
+        self.handle_input()
+        self.apply_gravity()
+
+
+class Enemy(pg.sprite.Sprite):
+    def __init__(self, surf_y_pos: int, screen_width: int):
+        super().__init__()
+        self.speed = 4
+        self.kind = choice(('running', 'flying'))
+        match self.kind:
+            case 'running':
+                self.image = pg.image.load(Path('graphics', 'running_enemy.png')).convert()
+                self.rect = self.image.get_rect(midbottom=(
+                    randint(screen_width + 256, screen_width + 512), surf_y_pos))
+            case 'flying':
+                self.image = pg.image.load(Path('graphics', 'flying_enemy.png')).convert()
+                self.rect = self.image.get_rect(midbottom=(
+                    randint(screen_width + 256, screen_width + 512), surf_y_pos - 64))
+
+    def update(self):
+        self.rect.x -= self.speed
+        self.destroy()
+
+    def destroy(self):
+        if self.rect.x <= -self.rect.width:
+            self.kill()
 
 
 class Sky:
@@ -110,26 +159,22 @@ def main():
     screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pg.time.Clock()
 
-    game_is_active = False
-
     sky = Sky(screen)
     ground = Ground(screen, pg.image.load(Path('graphics', 'ground.png')).convert())
-
-    player_surf = pg.image.load(Path('graphics', 'player.png')).convert()
-    player_rect = player_surf.get_rect(midbottom=(64, ground.surf_y_pos))
-    player_gravity = 0
-
-    running_enemy_surf = pg.image.load(Path('graphics', 'running_enemy.png')).convert()
-    flying_enemy_surf = pg.image.load(Path('graphics', 'flying_enemy.png')).convert()
-    enemies_rects = []
 
     fps_counter = FPSCounter(screen, clock)
     score_counter = ScoreCounter(screen)
     start_screen = StartScreen(screen)
     game_over_screen = GameOverScreen(screen)
 
+    player_group = pg.sprite.GroupSingle()
+    player_group.add(Player((64, ground.surf_y_pos)))
+
+    enemies_group = pg.sprite.Group()
     enemy_timer = pg.USEREVENT + 1
     pg.time.set_timer(enemy_timer, 1800)
+
+    game_is_active = False
 
     while True:
         for event in pg.event.get():
@@ -138,47 +183,22 @@ def main():
                 exit()
 
             if game_is_active:
-                if event.type == pg.KEYDOWN:
-                    if event.key == pg.K_SPACE and player_rect.bottom >= ground.surf_y_pos:
-                        player_gravity = -22
                 if event.type == enemy_timer:
-                    if randint(0, 2):
-                        enemies_rects.append(running_enemy_surf.get_rect(midbottom=(
-                            randint(screen.get_width() + 256, screen.get_width() + 512), ground.surf_y_pos)))
-                    else:
-                        enemies_rects.append(flying_enemy_surf.get_rect(midbottom=(
-                            randint(screen.get_width() + 256, screen.get_width() + 512), ground.surf_y_pos - 64)))
+                    enemies_group.add(Enemy(ground.surf_y_pos, screen.get_width()))
             else:
                 if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
-                    enemies_rects.clear()
                     score_counter.refresh()
-                    player_gravity = 0
-                    player_rect.midbottom = (64, ground.surf_y_pos)
                     game_is_active = True
 
         if game_is_active:
             sky.render()
             ground.render()
 
-            player_gravity += 1
-            player_rect.y += player_gravity
-            if player_rect.bottom >= ground.surf_y_pos:
-                player_rect.bottom = ground.surf_y_pos
-            screen.blit(player_surf, player_rect)
+            player_group.draw(screen)
+            player_group.update()
 
-            if enemies_rects:
-                for enemy_rect in enemies_rects:
-                    if enemy_rect.colliderect(player_rect):
-                        game_is_active = False
-
-                    enemy_rect.x -= 4
-
-                    if enemy_rect.bottom == ground.surf_y_pos:
-                        screen.blit(running_enemy_surf, enemy_rect)
-                    else:
-                        screen.blit(flying_enemy_surf, enemy_rect)
-
-                enemies_rects = [enemy_rect for enemy_rect in enemies_rects if enemy_rect.x > -enemy_rect.width]
+            enemies_group.draw(screen)
+            enemies_group.update()
 
             fps_counter.render()
             score_counter.render()
