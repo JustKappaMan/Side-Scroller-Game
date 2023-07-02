@@ -162,6 +162,10 @@ def main():
     screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pg.time.Clock()
 
+    background_music = pg.mixer.Sound(Path('audio', 'soundtrack.ogg'))
+    background_music.set_volume(0.5)
+    background_music.play(loops=-1)
+
     sky = Sky(screen)
     ground = Ground(screen, pg.image.load(Path('graphics', 'ground.png')).convert())
 
