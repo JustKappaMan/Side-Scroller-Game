@@ -44,7 +44,7 @@ class Player(pg.sprite.Sprite):
 class Enemy(pg.sprite.Sprite):
     def __init__(self, surf_y_pos: int, screen_width: int):
         super().__init__()
-        self.speed = 4
+        self.speed = 5
         if randint(0, 2):
             self.image = pg.image.load(Path('graphics', 'running_enemy.png')).convert()
             self.rect = self.image.get_rect(midbottom=(
