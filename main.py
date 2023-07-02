@@ -9,13 +9,13 @@ from settings import *
 
 
 class Player(pg.sprite.Sprite):
-    def __init__(self, position: tuple[int, int]):
+    def __init__(self, initial_position: tuple[int, int]):
         super().__init__()
         self.image = pg.image.load(Path('graphics', 'player.png')).convert()
-        self.rect = self.image.get_rect(midbottom=position)
+        self.rect = self.image.get_rect(midbottom=initial_position)
+        self.initial_position = initial_position
         self.gravity = 0
         self.jump_gravity = -22
-        self.initial_position = position
         self.jump_sound = pg.mixer.Sound(Path('audio', 'jump.ogg'))
         self.jump_sound.set_volume(0.5)
 
