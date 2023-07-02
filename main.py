@@ -16,11 +16,14 @@ class Player(pg.sprite.Sprite):
         self.gravity = 0
         self.jump_gravity = -22
         self.initial_position = position
+        self.jump_sound = pg.mixer.Sound(Path('audio', 'jump.ogg'))
+        self.jump_sound.set_volume(0.5)
 
     def handle_input(self):
         keys = pg.key.get_pressed()
         if keys[pg.K_SPACE] and self.rect.bottom >= self.initial_position[1]:
             self.gravity = self.jump_gravity
+            self.jump_sound.play()
 
     def apply_gravity(self):
         self.gravity += 1
