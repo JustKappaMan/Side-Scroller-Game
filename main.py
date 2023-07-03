@@ -151,7 +151,7 @@ class GameOverScreen:
         self.screen = screen
         self.background_color = pg.color.Color('red')
         self.font = pg.font.SysFont('Arial', 32, bold=True)
-        self.font_surf = self.font.render('Game Over', True, pg.color.Color('yellow'))
+        self.font_surf = self.font.render('Press S to restart', True, pg.color.Color('yellow'))
         self.font_rect = self.font_surf.get_rect(center=(screen.get_width() // 2, screen.get_height() // 2))
 
     def render(self):
