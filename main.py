@@ -42,17 +42,17 @@ class Player(pg.sprite.Sprite):
 
 
 class Enemy(pg.sprite.Sprite):
-    def __init__(self, surf_y_pos: int, screen_width: int):
+    def __init__(self):
         super().__init__()
         self.speed = 5
         if randint(0, 2):
             self.image = pg.image.load(Path('graphics', 'running_enemy.png')).convert()
             self.rect = self.image.get_rect(midbottom=(
-                randint(screen_width + 256, screen_width + 512), surf_y_pos))
+                randint(game.screen.get_width() + 256, game.screen.get_width() + 512), game.ground.surf_y_pos))
         else:
             self.image = pg.image.load(Path('graphics', 'flying_enemy.png')).convert()
             self.rect = self.image.get_rect(midbottom=(
-                randint(screen_width + 256, screen_width + 512), surf_y_pos - 64))
+                randint(game.screen.get_width() + 256, game.screen.get_width() + 512), game.ground.surf_y_pos - 64))
 
     def update(self):
         self.rect.x -= self.speed
@@ -159,74 +159,77 @@ class GameOverScreen:
         self.screen.blit(self.font_surf, self.font_rect)
 
 
-def main():
-    pg.init()
-    pg.display.set_caption('Simple Game')
-    screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    clock = pg.time.Clock()
+class Game:
+    def __init__(self):
+        pg.init()
+        pg.display.set_caption('Simple Game')
+        self.screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        self.clock = pg.time.Clock()
 
-    background_music = pg.mixer.Sound(Path('audio', 'soundtrack.ogg'))
-    background_music.set_volume(0.5)
-    background_music.play(loops=-1)
+        self.background_music = pg.mixer.Sound(Path('audio', 'soundtrack.ogg'))
+        self.background_music.set_volume(0.5)
+        self.background_music.play(loops=-1)
 
-    start_screen = StartScreen(screen)
-    game_over_screen = GameOverScreen(screen)
+        self.start_screen = StartScreen(self.screen)
+        self.game_over_screen = GameOverScreen(self.screen)
 
-    sky = Sky(screen)
-    ground = Ground(screen)
+        self.sky = Sky(self.screen)
+        self.ground = Ground(self.screen)
 
-    fps_counter = FPSCounter(screen, clock)
-    score_counter = ScoreCounter(screen)
+        self.fps_counter = FPSCounter(self.screen, self.clock)
+        self.score_counter = ScoreCounter(self.screen)
 
-    player_group = pg.sprite.GroupSingle()
-    # noinspection PyTypeChecker
-    player_group.add(Player((64, ground.surf_y_pos)))
+        self.player = pg.sprite.GroupSingle()
+        # noinspection PyTypeChecker
+        self.player.add(Player((64, self.ground.surf_y_pos)))
 
-    enemies_group = pg.sprite.Group()
-    enemy_timer = pg.USEREVENT + 1
-    pg.time.set_timer(enemy_timer, 1800)
+        self.enemies = pg.sprite.Group()
+        self.enemy_timer = pg.USEREVENT + 1
+        pg.time.set_timer(self.enemy_timer, 1800)
 
-    game_is_active = False
+        self.is_active = False
 
-    while True:
-        for event in pg.event.get():
-            if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
-                pg.quit()
-                exit()
+    def run(self):
+        while True:
+            for event in pg.event.get():
+                if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
+                    pg.quit()
+                    exit()
 
-            if game_is_active:
-                if event.type == enemy_timer:
-                    # noinspection PyTypeChecker
-                    enemies_group.add(Enemy(ground.surf_y_pos, screen.get_width()))
+                if self.is_active:
+                    if event.type == self.enemy_timer:
+                        # noinspection PyTypeChecker
+                        self.enemies.add(Enemy())
+                else:
+                    if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
+                        self.score_counter.refresh()
+                        self.is_active = True
+
+            if self.is_active:
+                self.sky.render()
+                self.ground.render()
+                self.fps_counter.render()
+                self.score_counter.render()
+
+                self.player.draw(self.screen)
+                self.player.update()
+
+                self.enemies.draw(self.screen)
+                self.enemies.update()
+
+                if pg.sprite.spritecollide(self.player.sprite, self.enemies, False):
+                    self.enemies.empty()
+                    self.is_active = False
             else:
-                if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
-                    score_counter.refresh()
-                    game_is_active = True
+                if self.score_counter.current_score == 0:
+                    self.start_screen.render()
+                else:
+                    self.game_over_screen.render()
 
-        if game_is_active:
-            sky.render()
-            ground.render()
-            fps_counter.render()
-            score_counter.render()
-
-            player_group.draw(screen)
-            player_group.update()
-
-            enemies_group.draw(screen)
-            enemies_group.update()
-
-            if pg.sprite.spritecollide(player_group.sprite, enemies_group, False):
-                enemies_group.empty()
-                game_is_active = False
-        else:
-            if score_counter.current_score == 0:
-                start_screen.render()
-            else:
-                game_over_screen.render()
-
-        pg.display.update()
-        clock.tick(MAX_FRAMERATE)
+            pg.display.update()
+            self.clock.tick(MAX_FRAMERATE)
 
 
 if __name__ == '__main__':
-    main()
+    game = Game()
+    game.run()
