@@ -1,4 +1,4 @@
-# Simple Game
+# Platform Game
 ![MIT License](https://img.shields.io/github/license/JustKappaMan/Simple-Game)
 
 Trying pygame out.
