@@ -187,7 +187,7 @@ class Game:
         self.enemy_timer = pg.USEREVENT + 1
         pg.time.set_timer(self.enemy_timer, 1800)
 
-        self.is_active = False
+        self.is_running = False
 
     def run(self):
         while True:
@@ -196,16 +196,16 @@ class Game:
                     pg.quit()
                     exit()
 
-                if self.is_active:
+                if self.is_running:
                     if event.type == self.enemy_timer:
                         # noinspection PyTypeChecker
                         self.enemies.add(Enemy())
                 else:
                     if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
                         self.score_counter.refresh()
-                        self.is_active = True
+                        self.is_running = True
 
-            if self.is_active:
+            if self.is_running:
                 self.sky.render()
                 self.ground.render()
                 self.fps_counter.render()
@@ -219,7 +219,7 @@ class Game:
 
                 if pg.sprite.spritecollide(self.player.sprite, self.enemies, False):
                     self.enemies.empty()
-                    self.is_active = False
+                    self.is_running = False
             else:
                 if self.score_counter.current_score == 0:
                     self.start_screen.render()
