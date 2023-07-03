@@ -138,7 +138,7 @@ class StartScreen:
         self.screen = screen
         self.background_color = pg.color.Color('darkgreen')
         self.font = pg.font.SysFont('Arial', 32, bold=True)
-        self.font_surf = self.font.render('Press Space to run', True, pg.color.Color('yellow'))
+        self.font_surf = self.font.render('Press S to start', True, pg.color.Color('yellow'))
         self.font_rect = self.font_surf.get_rect(center=(screen.get_width() // 2, screen.get_height() // 2))
 
     def render(self):
@@ -201,7 +201,7 @@ class Game:
                         # noinspection PyTypeChecker
                         self.enemies.add(Enemy())
                 else:
-                    if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
+                    if event.type == pg.KEYDOWN and event.key == pg.K_s:
                         self.score_counter.refresh()
                         self.is_running = True
 
