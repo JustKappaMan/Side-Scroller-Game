@@ -1,5 +1,6 @@
 # Platform Game
 ![MIT License](https://img.shields.io/github/license/JustKappaMan/Simple-Game)
+![Checked with mypy](https://img.shields.io/badge/mypy-checked-blue)
 
 Trying pygame out.
 ## License
