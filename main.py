@@ -11,16 +11,18 @@ from settings import *
 class Player(pg.sprite.Sprite):
     def __init__(self, initial_position: tuple[int, int]):
         super().__init__()
-        self.image = pg.image.load(Path('graphics', 'player.png')).convert()
+        self.image = pg.image.load(Path("graphics", "player.png")).convert()
         self.rect = self.image.get_rect(midbottom=initial_position)
         self.initial_position = initial_position
 
         self.gravity = 0
         self.jump_gravity = -22
 
-        self.jump_sounds = (pg.mixer.Sound(Path('audio', 'jump1.ogg')),
-                            pg.mixer.Sound(Path('audio', 'jump2.ogg')),
-                            pg.mixer.Sound(Path('audio', 'jump3.ogg')))
+        self.jump_sounds = (
+            pg.mixer.Sound(Path("audio", "jump1.ogg")),
+            pg.mixer.Sound(Path("audio", "jump2.ogg")),
+            pg.mixer.Sound(Path("audio", "jump3.ogg")),
+        )
         for sound in self.jump_sounds:
             sound.set_volume(0.5)
 
@@ -46,13 +48,21 @@ class Enemy(pg.sprite.Sprite):
         super().__init__()
         self.speed = 5
         if randint(0, 2):
-            self.image = pg.image.load(Path('graphics', 'running_enemy.png')).convert()
-            self.rect = self.image.get_rect(midbottom=(
-                randint(game.screen.get_width() + 256, game.screen.get_width() + 512), game.ground.surf_y_pos))
+            self.image = pg.image.load(Path("graphics", "running_enemy.png")).convert()
+            self.rect = self.image.get_rect(
+                midbottom=(
+                    randint(game.screen.get_width() + 256, game.screen.get_width() + 512),
+                    game.ground.surf_y_pos,
+                )
+            )
         else:
-            self.image = pg.image.load(Path('graphics', 'flying_enemy.png')).convert()
-            self.rect = self.image.get_rect(midbottom=(
-                randint(game.screen.get_width() + 256, game.screen.get_width() + 512), game.ground.surf_y_pos - 64))
+            self.image = pg.image.load(Path("graphics", "flying_enemy.png")).convert()
+            self.rect = self.image.get_rect(
+                midbottom=(
+                    randint(game.screen.get_width() + 256, game.screen.get_width() + 512),
+                    game.ground.surf_y_pos - 64,
+                )
+            )
 
     def update(self):
         self.rect.x -= self.speed
@@ -67,7 +77,7 @@ class Sky:
     def __init__(self, screen: pg.Surface):
         self.screen = screen
         self.surf = pg.Surface(screen.get_size())
-        self.surf.fill(pg.color.Color('skyblue'))
+        self.surf.fill(pg.color.Color("skyblue"))
         self.surf_pos = (0, 0)
 
     def render(self):
@@ -77,7 +87,7 @@ class Sky:
 class Ground:
     def __init__(self, screen: pg.Surface):
         self.screen = screen
-        self.surf = pg.image.load(Path('graphics', 'ground.png')).convert()
+        self.surf = pg.image.load(Path("graphics", "ground.png")).convert()
         self.surfs_count = ceil(screen.get_width() / self.surf.get_width())
 
         match round(screen.get_height() / self.surf.get_height()):
@@ -97,15 +107,15 @@ class FPSCounter:
     def __init__(self, screen: pg.Surface, clock: pg.time.Clock):
         self.screen = screen
         self.clock = clock
-        self.font = pg.font.SysFont('Arial', 16, bold=True)
-        self.color = pg.color.Color('red')
+        self.font = pg.font.SysFont("Arial", 16, bold=True)
+        self.color = pg.color.Color("red")
         self.position = (screen.get_width() - 8, 8)
         self.fps = None
         self.surf = None
         self.rect = None
 
     def render(self):
-        self.fps = f'{int(self.clock.get_fps())}'
+        self.fps = f"{int(self.clock.get_fps())}"
         self.surf = self.font.render(self.fps, True, self.color)
         self.rect = self.surf.get_rect(topright=self.position)
         self.screen.blit(self.surf, self.rect)
@@ -114,8 +124,8 @@ class FPSCounter:
 class ScoreCounter:
     def __init__(self, screen: pg.Surface):
         self.screen = screen
-        self.font = pg.font.SysFont('Arial', 16, bold=True)
-        self.color = pg.color.Color('darkgreen')
+        self.font = pg.font.SysFont("Arial", 16, bold=True)
+        self.color = pg.color.Color("darkgreen")
         self.position = (8, 8)
         self.start_score = 0
         self.current_score = 0
@@ -125,7 +135,7 @@ class ScoreCounter:
 
     def render(self):
         self.current_score = pg.time.get_ticks() // self.score_divisor - self.start_score
-        self.surf = self.font.render(f'Score: {self.current_score}', True, self.color)
+        self.surf = self.font.render(f"Score: {self.current_score}", True, self.color)
         self.rect = self.surf.get_rect(topleft=self.position)
         self.screen.blit(self.surf, self.rect)
 
@@ -136,9 +146,9 @@ class ScoreCounter:
 class StartScreen:
     def __init__(self, screen: pg.Surface):
         self.screen = screen
-        self.background_color = pg.color.Color('darkgreen')
-        self.font = pg.font.SysFont('Arial', 32, bold=True)
-        self.font_surf = self.font.render('Press S to start', True, pg.color.Color('yellow'))
+        self.background_color = pg.color.Color("darkgreen")
+        self.font = pg.font.SysFont("Arial", 32, bold=True)
+        self.font_surf = self.font.render("Press S to start", True, pg.color.Color("yellow"))
         self.font_rect = self.font_surf.get_rect(center=(screen.get_width() // 2, screen.get_height() // 2))
 
     def render(self):
@@ -149,9 +159,9 @@ class StartScreen:
 class GameOverScreen:
     def __init__(self, screen: pg.Surface):
         self.screen = screen
-        self.background_color = pg.color.Color('red')
-        self.font = pg.font.SysFont('Arial', 32, bold=True)
-        self.font_surf = self.font.render('Press S to restart', True, pg.color.Color('yellow'))
+        self.background_color = pg.color.Color("red")
+        self.font = pg.font.SysFont("Arial", 32, bold=True)
+        self.font_surf = self.font.render("Press S to restart", True, pg.color.Color("yellow"))
         self.font_rect = self.font_surf.get_rect(center=(screen.get_width() // 2, screen.get_height() // 2))
 
     def render(self):
@@ -162,11 +172,11 @@ class GameOverScreen:
 class Game:
     def __init__(self):
         pg.init()
-        pg.display.set_caption('Simple Game')
+        pg.display.set_caption("Simple Game")
         self.screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.clock = pg.time.Clock()
 
-        self.background_music = pg.mixer.Sound(Path('audio', 'soundtrack.ogg'))
+        self.background_music = pg.mixer.Sound(Path("audio", "soundtrack.ogg"))
         self.background_music.set_volume(0.5)
         self.background_music.play(loops=-1)
 
@@ -230,6 +240,6 @@ class Game:
             self.clock.tick(MAX_FRAMERATE)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     game = Game()
     game.run()
