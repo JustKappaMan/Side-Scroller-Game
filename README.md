@@ -1,6 +1,5 @@
 # Side-Scroller Game
 ![MIT License](https://img.shields.io/github/license/JustKappaMan/Simple-Game)
-![Checked with mypy](https://img.shields.io/badge/mypy-checked-blue)
 ![Code style: black](https://img.shields.io/badge/code%20style-black-black)
 
 Side-scroller game built with pygame.
