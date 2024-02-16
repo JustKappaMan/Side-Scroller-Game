@@ -1,5 +1,5 @@
+import os.path
 from sys import exit
-from pathlib import Path
 from random import randint, choice
 
 import pygame as pg
@@ -13,7 +13,7 @@ from screens import StartScreen, GameOverScreen
 class Player(pg.sprite.Sprite):
     def __init__(self, initial_position: tuple[int, int]):
         super().__init__()
-        self.image = pg.image.load(Path("graphics", "player.png")).convert()
+        self.image = pg.image.load(os.path.join("graphics", "player.png")).convert()
         self.rect = self.image.get_rect(midbottom=initial_position)
         self.initial_position = initial_position
 
@@ -21,9 +21,9 @@ class Player(pg.sprite.Sprite):
         self.jump_gravity = -24
 
         self.jump_sounds = (
-            pg.mixer.Sound(Path("audio", "jump1.ogg")),
-            pg.mixer.Sound(Path("audio", "jump2.ogg")),
-            pg.mixer.Sound(Path("audio", "jump3.ogg")),
+            pg.mixer.Sound(os.path.join("audio", "jump1.ogg")),
+            pg.mixer.Sound(os.path.join("audio", "jump2.ogg")),
+            pg.mixer.Sound(os.path.join("audio", "jump3.ogg")),
         )
         for sound in self.jump_sounds:
             sound.set_volume(0.5)
@@ -50,7 +50,7 @@ class Enemy(pg.sprite.Sprite):
         super().__init__()
         self.speed = 5
         if randint(0, 2):
-            self.image = pg.image.load(Path("graphics", "running_enemy.png")).convert()
+            self.image = pg.image.load(os.path.join("graphics", "running_enemy.png")).convert()
             self.rect = self.image.get_rect(
                 midbottom=(
                     randint(game.screen.get_width() + 256, game.screen.get_width() + 512),
@@ -58,7 +58,7 @@ class Enemy(pg.sprite.Sprite):
                 )
             )
         else:
-            self.image = pg.image.load(Path("graphics", "flying_enemy.png")).convert()
+            self.image = pg.image.load(os.path.join("graphics", "flying_enemy.png")).convert()
             self.rect = self.image.get_rect(
                 midbottom=(
                     randint(game.screen.get_width() + 256, game.screen.get_width() + 512),
@@ -82,7 +82,7 @@ class Game:
         self.screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.clock = pg.time.Clock()
 
-        self.background_music = pg.mixer.Sound(Path("audio", "soundtrack.ogg"))
+        self.background_music = pg.mixer.Sound(os.path.join("audio", "soundtrack.ogg"))
         self.background_music.set_volume(0.5)
         self.background_music.play(loops=-1)
 
