@@ -1,11 +1,11 @@
 from sys import exit
-from math import ceil
 from pathlib import Path
 from random import randint, choice
 
 import pygame as pg
 
 from settings import *
+from surfaces import Sky, Ground
 from counters import FPSCounter, ScoreCounter
 from screens import StartScreen, GameOverScreen
 
@@ -73,36 +73,6 @@ class Enemy(pg.sprite.Sprite):
     def destroy(self):
         if self.rect.x <= -self.rect.width:
             self.kill()
-
-
-class Sky:
-    def __init__(self, screen: pg.Surface):
-        self.screen = screen
-        self.surf = pg.Surface(screen.get_size())
-        self.surf.fill(pg.color.Color("skyblue"))
-        self.surf_pos = (0, 0)
-
-    def render(self):
-        self.screen.blit(self.surf, self.surf_pos)
-
-
-class Ground:
-    def __init__(self, screen: pg.Surface):
-        self.screen = screen
-        self.surf = pg.image.load(Path("graphics", "ground.png")).convert()
-        self.surfs_count = ceil(screen.get_width() / self.surf.get_width())
-
-        match round(screen.get_height() / self.surf.get_height()):
-            case 2:
-                self.surf_y_pos = screen.get_height() - self.surf.get_height() // 4
-            case 3:
-                self.surf_y_pos = screen.get_height() - self.surf.get_height() // 2
-            case _:
-                self.surf_y_pos = screen.get_height() - self.surf.get_height()
-
-    def render(self):
-        for i in range(self.surfs_count):
-            self.screen.blit(self.surf, (i * self.surf.get_width(), self.surf_y_pos))
 
 
 class Game:
