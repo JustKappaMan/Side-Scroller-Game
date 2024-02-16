@@ -17,7 +17,7 @@ class Player(pg.sprite.Sprite):
         self.initial_position = initial_position
 
         self.gravity = 0
-        self.jump_gravity = -22
+        self.jump_gravity = -24
 
         self.jump_sounds = (
             pg.mixer.Sound(Path("audio", "jump1.ogg")),
