@@ -1,6 +1,6 @@
+import sys
 import os.path
-from sys import exit
-from random import randint, choice
+from random import choice, randint
 
 import pygame as pg
 
@@ -110,7 +110,7 @@ class Game:
             for event in pg.event.get():
                 if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
                     pg.quit()
-                    exit()
+                    sys.exit()
 
                 if self.is_running:
                     if event.type == self.enemy_timer:

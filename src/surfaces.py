@@ -1,5 +1,5 @@
+import math
 import os.path
-from math import ceil
 
 import pygame as pg
 
@@ -19,7 +19,7 @@ class Ground:
     def __init__(self, screen: pg.Surface):
         self.screen = screen
         self.surf = pg.image.load(os.path.join("graphics", "ground.png")).convert()
-        self.surfs_count = ceil(screen.get_width() / self.surf.get_width())
+        self.surfs_count = math.ceil(screen.get_width() / self.surf.get_width())
 
         match round(screen.get_height() / self.surf.get_height()):
             case 2:
