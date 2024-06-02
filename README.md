@@ -5,7 +5,6 @@
 Side-scroller game built with pygame.
 
 ## Credits
-* [JetBrains](https://www.jetbrains.com) for [Open Source Development license](https://www.jetbrains.com/community/opensource)
 * [Volcano of Bears](https://opengameart.org/users/volcano-of-bears) for [soundtrack](https://opengameart.org/content/8-bit-level-music-prominade)
 * [jalastram](https://opengameart.org/users/jalastram) for [jump sound effect](https://opengameart.org/content/8-bit-jump-1)
 
