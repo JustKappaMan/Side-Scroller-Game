@@ -1,8 +1,10 @@
 [project]
 name = "side-scroller-game"
 version = "1.0.0"
-description = "Add your description here"
+description = "Side-scroller game built with pygame"
 readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
 requires-python = ">=3.13"
 dependencies = [
     "pygame>=2.6.1",
