@@ -10,5 +10,11 @@ dependencies = [
     "pygame>=2.6.1",
 ]
 
+[project.scripts]
+side-scroller-game = "side_scroller_game.__main__:main"
+
+[tool.uv]
+package = true
+
 [tool.ruff]
 line-length = 120

@@ -1,30 +1,27 @@
 import sys
-import os.path
+from pathlib import Path
 from random import choice, randint
 
 import pygame as pg
 
-from settings import *
-from surfaces import Sky, Ground
-from counters import FPSCounter, ScoreCounter
-from screens import StartScreen, GameOverScreen
+from side_scroller_game.settings import *
+from side_scroller_game.surfaces import Sky, Ground
+from side_scroller_game.counters import FPSCounter, ScoreCounter
+from side_scroller_game.screens import StartScreen, GameOverScreen
+from side_scroller_game.paths import PLAYER_IMG, JUMP_SOUNDS, RUNNING_ENEMY_IMG, FLYING_ENEMY_IMG, SOUNDTRACK
 
 
 class Player(pg.sprite.Sprite):
     def __init__(self, initial_position: tuple[int, int]):
         super().__init__()
-        self.image = pg.image.load(os.path.join("graphics", "player.png")).convert()
+        self.image = pg.image.load(PLAYER_IMG).convert()
         self.rect = self.image.get_rect(midbottom=initial_position)
         self.initial_position = initial_position
 
         self.gravity = 0
         self.jump_gravity = -24
 
-        self.jump_sounds = (
-            pg.mixer.Sound(os.path.join("audio", "jump1.ogg")),
-            pg.mixer.Sound(os.path.join("audio", "jump2.ogg")),
-            pg.mixer.Sound(os.path.join("audio", "jump3.ogg")),
-        )
+        self.jump_sounds = [pg.mixer.Sound(path) for path in JUMP_SOUNDS]
         for sound in self.jump_sounds:
             sound.set_volume(0.5)
 
@@ -46,23 +43,23 @@ class Player(pg.sprite.Sprite):
 
 
 class Enemy(pg.sprite.Sprite):
-    def __init__(self):
+    def __init__(self, screen_width: int, ground_y: int):
         super().__init__()
         self.speed = 5
         if randint(0, 2):
-            self.image = pg.image.load(os.path.join("graphics", "running_enemy.png")).convert()
+            self.image = pg.image.load(RUNNING_ENEMY_IMG).convert()
             self.rect = self.image.get_rect(
                 midbottom=(
-                    randint(game.screen.get_width() + 256, game.screen.get_width() + 512),
-                    game.ground.surf_y_pos,
+                    randint(screen_width + 256, screen_width + 512),
+                    ground_y,
                 )
             )
         else:
-            self.image = pg.image.load(os.path.join("graphics", "flying_enemy.png")).convert()
+            self.image = pg.image.load(FLYING_ENEMY_IMG).convert()
             self.rect = self.image.get_rect(
                 midbottom=(
-                    randint(game.screen.get_width() + 256, game.screen.get_width() + 512),
-                    game.ground.surf_y_pos - 64,
+                    randint(screen_width + 256, screen_width + 512),
+                    ground_y - 64,
                 )
             )
 
@@ -82,7 +79,7 @@ class Game:
         self.screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.clock = pg.time.Clock()
 
-        self.background_music = pg.mixer.Sound(os.path.join("audio", "soundtrack.ogg"))
+        self.background_music = pg.mixer.Sound(SOUNDTRACK)
         self.background_music.set_volume(0.5)
         self.background_music.play(loops=-1)
 
@@ -115,7 +112,7 @@ class Game:
                 if self.is_running:
                     if event.type == self.enemy_timer:
                         # noinspection PyTypeChecker
-                        self.enemies.add(Enemy())
+                        self.enemies.add(Enemy(self.screen.get_width(), self.ground.surf_y_pos))
                 else:
                     if event.type == pg.KEYDOWN and event.key == pg.K_s:
                         self.score_counter.refresh()
@@ -146,6 +143,10 @@ class Game:
             self.clock.tick(MAX_FRAMERATE)
 
 
-if __name__ == "__main__":
+def main():
     game = Game()
     game.run()
+
+
+if __name__ == "__main__":
+    main()

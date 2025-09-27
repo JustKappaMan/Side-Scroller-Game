@@ -1,7 +1,8 @@
 import math
-import os.path
 
 import pygame as pg
+
+from side_scroller_game.paths import GROUND_IMG
 
 
 class Sky:
@@ -18,7 +19,7 @@ class Sky:
 class Ground:
     def __init__(self, screen: pg.Surface):
         self.screen = screen
-        self.surf = pg.image.load(os.path.join("graphics", "ground.png")).convert()
+        self.surf = pg.image.load(GROUND_IMG).convert()
         self.surfs_count = math.ceil(screen.get_width() / self.surf.get_width())
 
         match round(screen.get_height() / self.surf.get_height()):

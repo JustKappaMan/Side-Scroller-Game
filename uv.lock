@@ -20,7 +20,7 @@ wheels = [
 [[package]]
 name = "side-scroller-game"
 version = "1.0.0"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
     { name = "pygame" },
 ]
