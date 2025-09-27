@@ -4,6 +4,9 @@
 
 Side-scroller game built with pygame.
 
+# Usage
+`uv sync && uv run side-scroller-game`
+
 ## Credits
 * [Volcano of Bears](https://opengameart.org/users/volcano-of-bears) for [soundtrack](https://opengameart.org/content/8-bit-level-music-prominade)
 * [jalastram](https://opengameart.org/users/jalastram) for [jump sound effect](https://opengameart.org/content/8-bit-jump-1)
