@@ -75,7 +75,7 @@ class Enemy(pg.sprite.Sprite):
 class Game:
     def __init__(self):
         pg.init()
-        pg.display.set_caption("Simple Game")
+        pg.display.set_caption("Side-Scroller Game")
         self.screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.clock = pg.time.Clock()
 
