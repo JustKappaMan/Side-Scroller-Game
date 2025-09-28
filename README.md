@@ -4,7 +4,7 @@
 
 Side-scroller game built with pygame.
 
-# Usage
+## Usage
 `uv sync && uv run side-scroller-game`
 
 ## Credits
