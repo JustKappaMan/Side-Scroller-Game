@@ -3,10 +3,10 @@ from random import choice, randint
 
 import pygame as pg
 
-from side_scroller_game.settings import *
 from side_scroller_game.surfaces import Sky, Ground
 from side_scroller_game.counters import FPSCounter, ScoreCounter
 from side_scroller_game.screens import StartScreen, GameOverScreen
+from side_scroller_game.settings import SCREEN_WIDTH, SCREEN_HEIGHT, MAX_FRAMERATE
 from side_scroller_game.paths import PLAYER_IMG, JUMP_SOUNDS, RUNNING_ENEMY_IMG, FLYING_ENEMY_IMG, SOUNDTRACK
 
 
