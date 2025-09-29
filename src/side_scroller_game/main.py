@@ -1,5 +1,4 @@
 import sys
-from pathlib import Path
 from random import choice, randint
 
 import pygame as pg
@@ -146,7 +145,3 @@ class Game:
 def main():
     game = Game()
     game.run()
-
-
-if __name__ == "__main__":
-    main()
