@@ -22,13 +22,13 @@ class Ground:
         self.surf = pg.image.load(GROUND_IMG).convert()
         self.surfs_count = math.ceil(screen.get_width() / self.surf.get_width())
 
-        match round(screen.get_height() / self.surf.get_height()):
-            case 2:
-                self.surf_y_pos = screen.get_height() - self.surf.get_height() // 4
-            case 3:
-                self.surf_y_pos = screen.get_height() - self.surf.get_height() // 2
-            case _:
-                self.surf_y_pos = screen.get_height() - self.surf.get_height()
+        ratio = round(screen.get_height() / self.surf.get_height())
+        if ratio == 2:
+            self.surf_y_pos = screen.get_height() - self.surf.get_height() // 4
+        elif ratio == 3:
+            self.surf_y_pos = screen.get_height() - self.surf.get_height() // 2
+        else:
+            self.surf_y_pos = screen.get_height() - self.surf.get_height()
 
     def render(self):
         for i in range(self.surfs_count):
