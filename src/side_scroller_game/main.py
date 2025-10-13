@@ -3,15 +3,15 @@ from random import choice, randint
 
 import pygame as pg
 
-from side_scroller_game.surfaces import Sky, Ground
 from side_scroller_game.counters import FPSCounter, ScoreCounter
-from side_scroller_game.screens import StartScreen, GameOverScreen
-from side_scroller_game.settings import SCREEN_WIDTH, SCREEN_HEIGHT, MAX_FRAMERATE
-from side_scroller_game.paths import PLAYER_IMG, JUMP_SOUNDS, RUNNING_ENEMY_IMG, FLYING_ENEMY_IMG, SOUNDTRACK
+from side_scroller_game.paths import FLYING_ENEMY_IMG, JUMP_SOUNDS, PLAYER_IMG, RUNNING_ENEMY_IMG, SOUNDTRACK
+from side_scroller_game.screens import GameOverScreen, StartScreen
+from side_scroller_game.settings import MAX_FRAMERATE, SCREEN_HEIGHT, SCREEN_WIDTH
+from side_scroller_game.surfaces import Ground, Sky
 
 
 class Player(pg.sprite.Sprite):
-    def __init__(self, initial_position: tuple[int, int]):
+    def __init__(self, initial_position: tuple[int, int]) -> None:
         super().__init__()
         self.image = pg.image.load(PLAYER_IMG).convert()
         self.rect = self.image.get_rect(midbottom=initial_position)
@@ -24,25 +24,24 @@ class Player(pg.sprite.Sprite):
         for sound in self.jump_sounds:
             sound.set_volume(0.5)
 
-    def handle_input(self):
+    def handle_input(self) -> None:
         keys = pg.key.get_pressed()
         if keys[pg.K_SPACE] and self.rect.bottom >= self.initial_position[1]:
             self.gravity = self.jump_gravity
             choice(self.jump_sounds).play()
 
-    def apply_gravity(self):
+    def apply_gravity(self) -> None:
         self.gravity += 1
         self.rect.y += self.gravity
-        if self.rect.bottom >= self.initial_position[1]:
-            self.rect.bottom = self.initial_position[1]
+        self.rect.bottom = min(self.rect.bottom, self.initial_position[1])
 
-    def update(self):
+    def update(self) -> None:
         self.handle_input()
         self.apply_gravity()
 
 
 class Enemy(pg.sprite.Sprite):
-    def __init__(self, screen_width: int, ground_y: int):
+    def __init__(self, screen_width: int, ground_y: int) -> None:
         super().__init__()
         self.speed = 5
         if randint(0, 2):
@@ -62,17 +61,17 @@ class Enemy(pg.sprite.Sprite):
                 )
             )
 
-    def update(self):
+    def update(self) -> None:
         self.rect.x -= self.speed
         self.destroy()
 
-    def destroy(self):
+    def destroy(self) -> None:
         if self.rect.x <= -self.rect.width:
             self.kill()
 
 
 class Game:
-    def __init__(self):
+    def __init__(self) -> None:
         pg.init()
         pg.display.set_caption("Side-Scroller Game")
         self.screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -100,7 +99,7 @@ class Game:
 
         self.is_running = False
 
-    def run(self):
+    def run(self) -> None:
         while True:
             for event in pg.event.get():
                 if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
@@ -140,6 +139,6 @@ class Game:
             self.clock.tick(MAX_FRAMERATE)
 
 
-def main():
+def main() -> None:
     game = Game()
     game.run()

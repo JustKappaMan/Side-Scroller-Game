@@ -2,7 +2,7 @@ import pygame as pg
 
 
 class FPSCounter:
-    def __init__(self, screen: pg.Surface, clock: pg.time.Clock):
+    def __init__(self, screen: pg.Surface, clock: pg.time.Clock) -> None:
         self.screen = screen
         self.clock = clock
         self.font = pg.font.SysFont("Arial", 16, bold=True)
@@ -12,7 +12,7 @@ class FPSCounter:
         self.surf = None
         self.rect = None
 
-    def render(self):
+    def render(self) -> None:
         self.fps = f"{int(self.clock.get_fps())}"
         self.surf = self.font.render(self.fps, True, self.color)
         self.rect = self.surf.get_rect(topright=self.position)
@@ -20,7 +20,7 @@ class FPSCounter:
 
 
 class ScoreCounter:
-    def __init__(self, screen: pg.Surface):
+    def __init__(self, screen: pg.Surface) -> None:
         self.screen = screen
         self.font = pg.font.SysFont("Arial", 16, bold=True)
         self.color = pg.color.Color("darkgreen")
@@ -31,11 +31,11 @@ class ScoreCounter:
         self.surf = None
         self.rect = None
 
-    def render(self):
+    def render(self) -> None:
         self.current_score = pg.time.get_ticks() // self.score_divisor - self.start_score
         self.surf = self.font.render(f"Score: {self.current_score}", True, self.color)
         self.rect = self.surf.get_rect(topleft=self.position)
         self.screen.blit(self.surf, self.rect)
 
-    def refresh(self):
+    def refresh(self) -> None:
         self.start_score = pg.time.get_ticks() // self.score_divisor
