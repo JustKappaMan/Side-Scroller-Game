@@ -5,7 +5,7 @@ import pygame as pg
 
 from side_scroller_game.counters import FPSCounter, ScoreCounter
 from side_scroller_game.paths import FLYING_ENEMY_IMG, JUMP_SOUNDS, PLAYER_IMG, RUNNING_ENEMY_IMG, SOUNDTRACK
-from side_scroller_game.screens import GameOverScreen, StartScreen
+from side_scroller_game.screens import MessageScreen
 from side_scroller_game.settings import MAX_FRAMERATE, SCREEN_HEIGHT, SCREEN_WIDTH
 from side_scroller_game.surfaces import Ground, Sky
 
@@ -81,8 +81,8 @@ class Game:
         self.background_music.set_volume(0.5)
         self.background_music.play(loops=-1)
 
-        self.start_screen = StartScreen(self.screen)
-        self.game_over_screen = GameOverScreen(self.screen)
+        self.start_screen = MessageScreen(self.screen, "darkgreen", "Press S to start")
+        self.game_over_screen = MessageScreen(self.screen, "red", "Press S to restart")
 
         self.sky = Sky(self.screen)
         self.ground = Ground(self.screen)

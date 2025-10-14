@@ -1,26 +1,15 @@
 import pygame as pg
 
 
-class StartScreen:
-    def __init__(self, screen: pg.Surface) -> None:
-        self.screen = screen
-        self.background_color = pg.color.Color("darkgreen")
+class MessageScreen:
+    def __init__(self, target_surface: pg.Surface, background_color: str, text: str) -> None:
+        self.screen = target_surface
+        self.background_color = pg.color.Color(background_color)
         self.font = pg.font.SysFont("Arial", 32, bold=True)
-        self.font_surf = self.font.render("Press S to start", True, pg.color.Color("yellow"))
-        self.font_rect = self.font_surf.get_rect(center=(screen.get_width() // 2, screen.get_height() // 2))
-
-    def render(self) -> None:
-        self.screen.fill(self.background_color)
-        self.screen.blit(self.font_surf, self.font_rect)
-
-
-class GameOverScreen:
-    def __init__(self, screen: pg.Surface) -> None:
-        self.screen = screen
-        self.background_color = pg.color.Color("red")
-        self.font = pg.font.SysFont("Arial", 32, bold=True)
-        self.font_surf = self.font.render("Press S to restart", True, pg.color.Color("yellow"))
-        self.font_rect = self.font_surf.get_rect(center=(screen.get_width() // 2, screen.get_height() // 2))
+        self.font_surf = self.font.render(text, True, pg.color.Color("yellow"))
+        self.font_rect = self.font_surf.get_rect(
+            center=(target_surface.get_width() // 2, target_surface.get_height() // 2)
+        )
 
     def render(self) -> None:
         self.screen.fill(self.background_color)
