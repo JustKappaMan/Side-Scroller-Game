@@ -2,12 +2,12 @@ import pygame as pg
 
 
 class FPSCounter:
-    def __init__(self, screen: pg.Surface, clock: pg.time.Clock) -> None:
-        self.screen = screen
+    def __init__(self, target_surface: pg.Surface, clock: pg.time.Clock) -> None:
+        self.screen = target_surface
         self.clock = clock
         self.font = pg.font.SysFont("Arial", 16, bold=True)
         self.color = pg.color.Color("red")
-        self.position = (screen.get_width() - 8, 8)
+        self.position = (self.screen.get_width() - 8, 8)
         self.fps = None
         self.surf = None
         self.rect = None
@@ -20,8 +20,8 @@ class FPSCounter:
 
 
 class ScoreCounter:
-    def __init__(self, screen: pg.Surface) -> None:
-        self.screen = screen
+    def __init__(self, target_surface: pg.Surface) -> None:
+        self.screen = target_surface
         self.font = pg.font.SysFont("Arial", 16, bold=True)
         self.color = pg.color.Color("darkgreen")
         self.position = (8, 8)
