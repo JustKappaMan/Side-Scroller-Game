@@ -1,3 +1,4 @@
 from side_scroller_game.main import main
 
-main()
+if __name__ == "__main__":
+    main()
