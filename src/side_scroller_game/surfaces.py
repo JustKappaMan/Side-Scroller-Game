@@ -20,9 +20,10 @@ class Ground:
     def __init__(self, target_surface: pg.Surface) -> None:
         self.screen = target_surface
         self.surf = pg.image.load(GROUND_IMG).convert()
+        self.surf_width = self.surf.get_width()
         self.surf_y_pos = self.screen.get_height() - self.screen.get_height() // 5
         self.surfs_count = math.ceil(self.screen.get_width() / self.surf.get_width())
 
     def render(self) -> None:
         for i in range(self.surfs_count):
-            self.screen.blit(self.surf, (i * self.surf.get_width(), self.surf_y_pos))
+            self.screen.blit(self.surf, (i * self.surf_width, self.surf_y_pos))
